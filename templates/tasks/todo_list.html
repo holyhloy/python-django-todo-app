@@ -19,5 +19,8 @@
         <h5>You have no tasks in this list</h5>
         {% endfor %}
     </ul>
+    <p>
+    <input value="Add a new item" type="button" onclick="location.href='{% url "item-add" todo_list.id %}'">
+    </p>
 </div>
 {% endblock %}
