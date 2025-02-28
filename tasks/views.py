@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template.context_processors import request
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
 from tasks.models import TodoList, TodoItem
@@ -70,6 +70,27 @@ class TodoItemCreateView(LoginRequiredMixin, CreateView):
         context["todo_list"] = todo_list
         context["title"] = "Create a new item"
         return context
+
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["due_date"].widget = forms.SelectDateWidget()
+        return form
+
+
+class TodoItemUpdateView(LoginRequiredMixin, UpdateView):
+    model = TodoItem
+    fields = ["todo_list", "title", "description", "due_date"]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["todo_list"] = self.object.todo_list
+        context["title"] = "Update item"
+        return context
+
+
+    def get_success_url(self):
+        return reverse("list", args=[self.object.todo_list_id])
 
 
     def get_form(self, form_class=None):
