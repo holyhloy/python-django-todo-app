@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
 from tasks.models import TodoList, TodoItem
@@ -26,3 +26,13 @@ class TodoItemListView(LoginRequiredMixin, ListView):
         if todo_list is None:
             raise PermissionDenied()
         return TodoItem.objects.filter(todo_list_id=self.kwargs["list_id"])
+
+
+class TodoListCreateView(LoginRequiredMixin, CreateView):
+    model = TodoList
+    fields = ["title"]
+
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
