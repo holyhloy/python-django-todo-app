@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template.context_processors import request
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
 from tasks.models import TodoList, TodoItem
@@ -97,3 +97,12 @@ class TodoItemUpdateView(LoginRequiredMixin, UpdateView):
         form = super().get_form(form_class)
         form.fields["due_date"].widget = forms.SelectDateWidget()
         return form
+
+
+class TodoListDeleteView(LoginRequiredMixin, DeleteView):
+    model = TodoList
+    success_url = reverse_lazy("index")
+
+
+    def get_queryset(self):
+        return TodoList.objects.for_user(self.request.user)
