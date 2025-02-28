@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    <div>
+        <h3>Edit list:</h3>
+        <h5>{{ todo_list | upper }}</h5>
+    </div>
+    <ul>
+        {% for todo in object_list %}
+        <li>
+            <button type="button" onclick="#">
+                {{ todo.title }}
+                {% if todo.due_date %}
+                 (Due {{ todo.due_date | date }})
+                {% endif %}
+            </button>
+        </li>
+        {% empty %}
+        <h5>You have no tasks in this list</h5>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
