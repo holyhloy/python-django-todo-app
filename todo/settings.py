@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'allauth.account',
     # Optional -- requires install using `django-allauth[socialaccount]`.
     'allauth.socialaccount',
-    'tasks'
+    'tasks',
+    'rest_framework',
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -140,3 +142,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
+
+#REST framework
+
+REST_FRAMEWORK = {'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+                  'PAGE_SIZE': 2}
